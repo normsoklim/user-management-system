@@ -1,0 +1,123 @@
+/* === GLOBAL LAYOUT === */
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bs-body-bg, #f8f9fa);
+}
+
+/* === NAVBAR === */
+app-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  z-index: 1055;
+  background: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* === MAIN CONTENT AREA === */
+.main-content {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  margin-top: 56px; /* navbar height */
+  transition: all 0.3s ease;
+  height: calc(100vh - 56px);
+}
+
+/* === SIDEBAR === */
+app-sidebar {
+  width: 260px;
+  transition: width 0.3s ease, transform 0.3s ease;
+  background: #212529;
+  color: #fff;
+  height: 100%;
+  overflow-y: auto;
+}
+
+app-sidebar.collapsed {
+  width: 70px !important;
+}
+
+/* PAGE CONTENT FIX */
+.page-content {
+  flex-grow: 1;
+  transition: all 0.3s ease;
+  width: calc(100% - 70px); /* collapsed sidebar width */
+  min-width: 0; /* prevents stretching */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.page-content.sidebar-shifted {
+  width: calc(100% - 260px); /* expanded sidebar width */
+}
+
+/* Ensure content wrapper doesn't stretch */
+.content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  flex-shrink: 1;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  app-sidebar {
+    position: fixed;
+    top: 56px;
+    left: -260px;
+    height: calc(100vh - 56px);
+    z-index: 1050;
+  }
+
+  app-sidebar.collapsed {
+    transform: translateX(260px);
+  }
+
+  .page-content,
+  .page-content.sidebar-shifted {
+    margin-left: 0 !important;
+    width: 100% !important;
+  }
+}
+
+/* === SCROLLBARS === */
+.page-content::-webkit-scrollbar,
+app-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.page-content::-webkit-scrollbar-thumb,
+app-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+/* === DARK MODE (optional) === */
+@media (prefers-color-scheme: dark) {
+  .page-content {
+    background: #1e1e1e;
+    color: #f1f1f1;
+  }
+
+  app-sidebar {
+    background: #151515;
+  }
+
+  app-navbar {
+    background: #222;
+    color: #f8f9fa;
+  }
+}

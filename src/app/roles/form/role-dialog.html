@@ -1,0 +1,149 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ pageTitle }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="role-form">
+    <div class="form-section">
+      <div class="section-header">
+        <h3 class="section-title">Basic Information</h3>
+        <p class="section-description">Enter the role's basic details</p>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name" class="form-label">Role Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user-tag input-icon"></i>
+            <input
+              id="name"
+              type="text"
+              class="form-control modern-input"
+              formControlName="name"
+              placeholder="Enter role name"
+              [class.is-invalid]="name?.invalid && name?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="name?.invalid && name?.touched">
+            <span *ngIf="name?.errors?.['required']">Role name is required</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <div class="input-wrapper">
+            <i class="fas fa-align-left input-icon"></i>
+            <input
+              id="description"
+              type="text"
+              class="form-control modern-input"
+              formControlName="description"
+              placeholder="Enter role description"
+              [class.is-invalid]="description?.invalid && description?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="description?.invalid && description?.touched">
+            <span *ngIf="description?.errors?.['required']">Description is required</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <h3 class="section-title">
+          Permissions 
+          <span class="permission-count">
+            ({{ selectedPermissionCount }} of {{ totalPermissionCount }} selected)
+          </span>
+        </h3>
+        <p class="section-description">Select permissions to assign to this role</p>
+      </div>
+      
+      <div class="permissions-container modern-permissions-container">
+        <div class="permission-category" *ngFor="let category of Object.keys(groupedPermissions)">
+          <div class="category-header modern-category-header">
+            <h4 class="category-title">{{ category }}</h4>
+            <div class="category-actions">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-outline-primary"
+                (click)="selectAllPermissionsInCategory(category)"
+                [disabled]="isCategoryFullySelected(category)"
+              >
+                Select All
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-sm btn-outline-secondary"
+                (click)="deselectAllPermissionsInCategory(category)"
+                [disabled]="!isCategoryPartiallySelected(category) && !isCategoryFullySelected(category)"
+              >
+                Deselect All
+              </button>
+            </div>
+          </div>
+          
+          <div class="permissions-grid modern-permissions-grid">
+            <div class="permission-item modern-permission-item" *ngFor="let permission of groupedPermissions[category]">
+              <label class="permission-checkbox modern-permission-checkbox">
+                <input
+                  type="checkbox"
+                  [checked]="isPermissionSelected(permission.id)"
+                  (change)="onPermissionChange(permission.id, $event)"
+                />
+                <span class="permission-checkmark"></span>
+                <div class="permission-info">
+                  <span class="permission-name">{{ permission.name }}</span>
+                  <span class="permission-description">{{ permission.description }}</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="invalid-feedback" *ngIf="permissions?.invalid && permissions?.touched">
+        <span *ngIf="permissions?.errors?.['required']">At least one permission must be selected</span>
+      </div>
+    </div>
+
+    <div class="form-section" *ngIf="isEditMode">
+      <div class="section-header">
+        <h3 class="section-title">Role Status</h3>
+        <p class="section-description">Manage the role's active status</p>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-checkbox modern-form-checkbox">
+          <input
+            type="checkbox"
+            formControlName="isActive"
+          />
+          <span class="checkbox-checkmark"></span>
+          <span class="checkbox-label">Role is active</span>
+        </label>
+        <small class="form-text text-muted">
+          Inactive roles cannot be assigned to users.
+        </small>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss('Cancel click')">
+    Cancel
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="roleForm.invalid || isLoading"
+    (click)="onSubmit()"
+  >
+    <span *ngIf="!isLoading">{{ submitButtonText }}</span>
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span *ngIf="isLoading" class="sr-only">{{ isEditMode ? 'Updating...' : 'Creating...' }}</span>
+  </button>
+</div>

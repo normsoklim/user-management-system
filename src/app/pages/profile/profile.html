@@ -1,0 +1,37 @@
+<div class="profile-container">
+  <div class="profile-header">
+    <h1>Profile</h1>
+  </div>
+  
+  <div class="profile-content" *ngIf="currentUser">
+    <div class="profile-card">
+      <div class="profile-avatar">
+        <div class="avatar-placeholder">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
+      
+      <div class="profile-details">
+        <div class="detail-row">
+          <label>Full Name:</label>
+          <span>{{ currentUser.firstName + ' ' + currentUser.lastName }}</span>
+        </div>
+        
+        <div class="detail-row">
+          <label>Username:</label>
+          <span>{{ currentUser.username }}</span>
+        </div>
+        
+        <div class="detail-row">
+          <label>Email:</label>
+          <span>{{ currentUser.email }}</span>
+        </div>
+        
+        <div class="detail-row">
+          <label>Roles:</label>
+          <span>{{ currentUser.roles.join(', ') }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

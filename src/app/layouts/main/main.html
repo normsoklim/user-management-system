@@ -1,0 +1,27 @@
+<div class="main-layout">
+  <app-loading [overlay]="true" message="Loading..."></app-loading>
+
+  <!-- Navbar -->
+  <app-navbar [isSidebarOpen]="isSidebarOpen" (toggleSidebar)="onSidebarToggle()">
+  </app-navbar>
+
+  <!-- Main Content -->
+  <div class="main-content d-flex flex-grow-1 overflow-hidden">
+    <app-sidebar class="bg-dark text-white flex-shrink-0" [class.collapsed]="!isSidebarOpen"
+      (closeSidebar)="onSidebarToggle()">
+    </app-sidebar>
+
+    <main class="page-content flex-grow-1" [class.sidebar-shifted]="isSidebarOpen">
+      <div class="content-wrapper container-fluid py-4">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-11 col-lg-10 col-xl-9">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <app-notification></app-notification>
+</div>

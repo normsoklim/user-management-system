@@ -1,0 +1,77 @@
+<!-- Modern Sidebar Component -->
+<aside class="sidebar-modern" [class.collapsed]="isCollapsed" [class.mobile-open]="isMobileOpen">
+  <!-- Sidebar Header with Gradient -->
+  <div class="sidebar-header-modern">
+    <div class="header-content">
+      <button class="sidebar-toggle-modern" (click)="toggleCollapse()" aria-label="Toggle sidebar">
+        <div class="hamburger-menu">
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+        </div>
+      </button>
+      
+      <div class="sidebar-brand-modern" *ngIf="!isCollapsed">
+        <div class="brand-logo-modern">
+          <div class="logo-container">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+        <div class="brand-text-modern">
+          <span class="brand-name-modern">UMS</span>
+          <span class="brand-tagline-modern">Admin Panel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar-nav-modern">
+    <!-- Main Section -->
+    <div class="nav-section-modern">
+      <div class="section-title-modern" *ngIf="!isCollapsed">Main</div>
+      <ul class="nav-menu-modern">
+        <!-- Dynamic menu items based on user roles -->
+        <li class="nav-item-modern" *ngFor="let item of menuItems" [class.hidden]="!hasAccess(item)" [attr.data-label]="item.label" [attr.data-has-access]="hasAccess(item)">
+          <a [routerLink]="item.link" routerLinkActive="active" class="nav-link-modern" (click)="navigateToRoute(item.link)">
+            <div class="nav-icon-modern">
+              <i [class]="item.icon"></i>
+            </div>
+            <div class="nav-content-modern">
+              <span class="nav-text-modern">{{ item.label }}</span>
+              <span class="nav-description-modern" *ngIf="!isCollapsed">{{ getDescription(item.label) }}</span>
+            </div>
+            <div class="nav-indicator-modern"></div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Sidebar Footer with User Profile -->
+  <div class="sidebar-footer-modern" *ngIf="!isCollapsed">
+    <div class="footer-content-modern">
+      <div class="user-profile-modern">
+        <div class="profile-avatar-modern">
+          <img src="https://via.placeholder.com/40" alt="User Avatar" class="avatar-img">
+        </div>
+        <div class="profile-info-modern">
+          <div class="profile-name-modern">{{ currentUser?.firstName + ' ' + currentUser?.lastName || currentUser?.username || 'Guest User' }}</div>
+          <div class="profile-role-modern">{{ currentUser?.roles?.join(', ') || 'User' }}</div>
+        </div>
+        <button class="profile-action-btn" (click)="onLogout()">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="sidebar-overlay-modern" [class.show]="isMobileOpen" (click)="onCloseSidebar()"></div>

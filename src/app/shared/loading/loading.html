@@ -1,0 +1,33 @@
+<ng-container *ngIf="loading$ | async">
+  <div class="loading-wrapper" [class.loading-overlay]="overlay">
+    <!-- Spinner Type -->
+    <div *ngIf="type === 'spinner'" class="loading-spinner" [class]="getSizeClass()">
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+      <div *ngIf="message" class="loading-message">{{ message }}</div>
+    </div>
+
+    <!-- Dots Type -->
+    <div *ngIf="type === 'dots'" class="loading-dots" [class]="getSizeClass()">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div *ngIf="message" class="loading-message">{{ message }}</div>
+    </div>
+
+    <!-- Pulse Type -->
+    <div *ngIf="type === 'pulse'" class="loading-pulse" [class]="getSizeClass()">
+      <div class="pulse-circle"></div>
+      <div *ngIf="message" class="loading-message">{{ message }}</div>
+    </div>
+
+    <!-- Skeleton Type -->
+    <div *ngIf="type === 'skeleton'" class="loading-skeleton">
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line short"></div>
+    </div>
+  </div>
+</ng-container>

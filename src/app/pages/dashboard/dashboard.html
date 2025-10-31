@@ -1,0 +1,166 @@
+<div class="dashboard">
+  <!-- Dashboard Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="dashboard-title">Dashboard</h1>
+        <p class="dashboard-subtitle">Welcome to the User Management System</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
+            <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Add User
+        </button>
+        <button class="btn btn-outline-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4m4-5l5 5 5-5m-5 5V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="loading-content">
+      <div class="spinner"></div>
+      <p>Loading dashboard data...</p>
+    </div>
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading" class="dashboard-content">
+    <!-- Stats Cards -->
+    <div class="stats-section">
+      <div class="section-header">
+        <h2 class="section-title">Overview</h2>
+        <p class="section-subtitle">Key metrics and performance indicators</p>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-card modern-card" (click)="navigateToUsers()">
+          <div class="stat-card-content">
+            <div class="stat-icon users">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2m22-10a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM9 9a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.totalUsers }}</div>
+              <div class="stat-label">Total Users</div>
+              <div class="stat-change positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="17,6 23,6 23,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                +12%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card-bg"></div>
+        </div>
+
+        <div class="stat-card modern-card" (click)="navigateToUsers()">
+          <div class="stat-card-content">
+            <div class="stat-icon active-users">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2m22-10a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM9 9a4 4 0 1 1-8 0 4 4 0 0 1 8 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.activeUsers }}</div>
+              <div class="stat-label">Active Users</div>
+              <div class="stat-change positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="17,6 23,6 23,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                +8%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card-bg"></div>
+        </div>
+
+        <div class="stat-card modern-card" (click)="navigateToRoles()">
+          <div class="stat-card-content">
+            <div class="stat-icon roles">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.totalRoles }}</div>
+              <div class="stat-label">Total Roles</div>
+              <div class="stat-change neutral">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                0%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card-bg"></div>
+        </div>
+
+        <div class="stat-card modern-card" (click)="navigateToAudit()">
+          <div class="stat-card-content">
+            <div class="stat-icon activities">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-number">{{ stats.recentActivities }}</div>
+              <div class="stat-label">Recent Activities</div>
+              <div class="stat-change positive">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <polyline points="23,6 13.5,15.5 8.5,10.5 1,18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <polyline points="17,6 23,6 23,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                +24%
+              </div>
+            </div>
+          </div>
+          <div class="stat-card-bg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="activities-section">
+      <div class="section-header">
+        <h2 class="section-title">Recent Activities</h2>
+        <p class="section-subtitle">Latest system events and user actions</p>
+      </div>
+      
+      <div class="activities-list">
+        <div *ngFor="let activity of recentActivities" class="activity-item modern-card">
+          <div class="activity-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <polyline points="12,6 12,12 16,14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="activity-details">
+            <h4 class="activity-title">{{ activity.action }}</h4>
+            <p class="activity-description">{{ activity.details }}</p>
+            <div class="activity-meta">
+              <span class="activity-user">{{ activity.user }}</span>
+              <span class="activity-time">{{ formatTimeAgo(activity.timestamp) }}</span>
+            </div>
+          </div>
+          <div class="activity-status">
+            <span class="status-badge success">Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

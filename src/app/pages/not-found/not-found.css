@@ -1,0 +1,357 @@
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 60px);
+  padding: 40px 20px;
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.not-found-content {
+  text-align: center;
+  max-width: 500px;
+  z-index: 2;
+}
+
+.error-code {
+  font-size: 120px;
+  font-weight: 700;
+  color: var(--primary-color);
+  line-height: 1;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.not-found-content h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0 0 15px 0;
+}
+
+.not-found-content p {
+  font-size: 16px;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin: 0 0 30px 0;
+}
+
+.actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+
+.btn-secondary:hover {
+  background-color: var(--gray-200);
+  transform: translateY(-2px);
+}
+
+/* Astronaut Illustration */
+.illustration {
+  position: absolute;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  height: 300px;
+  z-index: 1;
+}
+
+.astronaut {
+  position: relative;
+  width: 100px;
+  height: 150px;
+  margin: 75px auto;
+  animation: float 6s ease-in-out infinite;
+}
+
+.head {
+  width: 60px;
+  height: 60px;
+  background-color: var(--gray-100);
+  border-radius: 50%;
+  border: 3px solid var(--gray-300);
+  position: absolute;
+  top: 0;
+  left: 20px;
+}
+
+.head::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  top: 15px;
+  left: 15px;
+}
+
+.body {
+  width: 40px;
+  height: 60px;
+  background-color: var(--gray-100);
+  border-radius: 20px;
+  position: absolute;
+  top: 55px;
+  left: 30px;
+  border: 3px solid var(--gray-300);
+}
+
+.arm-left,
+.arm-right {
+  width: 12px;
+  height: 40px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  position: absolute;
+  top: 60px;
+  border: 2px solid #dee2e6;
+}
+
+.arm-left {
+  left: 15px;
+  transform: rotate(-20deg);
+}
+
+.arm-right {
+  right: 15px;
+  transform: rotate(20deg);
+}
+
+.leg-left,
+.leg-right {
+  width: 12px;
+  height: 35px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  position: absolute;
+  top: 110px;
+  border: 2px solid #dee2e6;
+}
+
+.leg-left {
+  left: 25px;
+}
+
+.leg-right {
+  right: 25px;
+}
+
+/* Stars */
+.stars {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.star {
+  position: absolute;
+  background-color: var(--warning-color);
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.star1 {
+  width: 4px;
+  height: 4px;
+  top: 20px;
+  left: 30px;
+  animation-delay: 0s;
+}
+
+.star2 {
+  width: 3px;
+  height: 3px;
+  top: 60px;
+  right: 40px;
+  animation-delay: 0.5s;
+}
+
+.star3 {
+  width: 5px;
+  height: 5px;
+  bottom: 40px;
+  left: 50px;
+  animation-delay: 1s;
+}
+
+.star4 {
+  width: 3px;
+  height: 3px;
+  top: 100px;
+  left: 20px;
+  animation-delay: 1.5s;
+}
+
+.star5 {
+  width: 4px;
+  height: 4px;
+  bottom: 80px;
+  right: 30px;
+  animation-delay: 2s;
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .not-found {
+    padding: 20px 15px;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .error-code {
+    font-size: 80px;
+  }
+  
+  .not-found-content h1 {
+    font-size: 24px;
+  }
+  
+  .not-found-content p {
+    font-size: 14px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .btn {
+    width: 200px;
+  }
+  
+  .illustration {
+    position: static;
+    transform: none;
+    width: 200px;
+    height: 200px;
+    margin-top: 40px;
+  }
+  
+  .astronaut {
+    width: 70px;
+    height: 105px;
+    margin: 50px auto;
+  }
+  
+  .head {
+    width: 42px;
+    height: 42px;
+    left: 14px;
+  }
+  
+  .head::before {
+    width: 10px;
+    height: 10px;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .body {
+    width: 28px;
+    height: 42px;
+    top: 38px;
+    left: 21px;
+  }
+  
+  .arm-left,
+  .arm-right {
+    width: 8px;
+    height: 28px;
+    top: 42px;
+  }
+  
+  .arm-left {
+    left: 10px;
+  }
+  
+  .arm-right {
+    right: 10px;
+  }
+  
+  .leg-left,
+  .leg-right {
+    width: 8px;
+    height: 24px;
+    top: 77px;
+  }
+  
+  .leg-left {
+    left: 17px;
+  }
+  
+  .leg-right {
+    right: 17px;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-code {
+    font-size: 60px;
+  }
+  
+  .not-found-content h1 {
+    font-size: 20px;
+  }
+  
+  .illustration {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .astronaut {
+    width: 50px;
+    height: 75px;
+    margin: 37px auto;
+  }
+}

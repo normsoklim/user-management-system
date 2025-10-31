@@ -1,0 +1,212 @@
+<div class="role-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Role Management</h1>
+      <p class="page-subtitle">Manage system roles and permissions</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline-primary" (click)="exportRoles()">
+        <i class="fas fa-download"></i>
+        Export
+      </button>
+      <button class="btn btn-primary" (click)="createRole()">
+        <i class="fas fa-plus"></i>
+        Add Role
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-header">
+      <h2 class="filters-title">Filters</h2>
+      <button class="btn btn-text clear-filters-btn" (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        Clear Filters
+      </button>
+    </div>
+    <div class="filters-row">
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search roles..."
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+        />
+        <button class="search-btn" (click)="onSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <select class="form-control" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+        <option value="">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+
+      <select class="form-control" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option [value]="10">10 per page</option>
+        <option [value]="25">25 per page</option>
+        <option [value]="50">50 per page</option>
+        <option [value]="100">100 per page</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="roles-table">
+      <thead>
+        <tr>
+          <th (click)="onSort('name')">
+            Role Name
+            <i class="sort-icon" [class]="getSortIcon('name')"></i>
+          </th>
+          <th (click)="onSort('description')">
+            Description
+            <i class="sort-icon" [class]="getSortIcon('description')"></i>
+          </th>
+          <th (click)="onSort('permissions')">
+            Permissions
+            <i class="sort-icon" [class]="getSortIcon('permissions')"></i>
+          </th>
+          <th (click)="onSort('userCount')">
+            Users
+            <i class="sort-icon" [class]="getSortIcon('userCount')"></i>
+          </th>
+          <th (click)="onSort('isActive')">
+            Status
+            <i class="sort-icon" [class]="getSortIcon('isActive')"></i>
+          </th>
+          <th (click)="onSort('createdAt')">
+            Created
+            <i class="sort-icon" [class]="getSortIcon('createdAt')"></i>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of roles; let i = index" [class.inactive]="!role.isActive" [style.--row-index]="i">
+          <td class="role-name">
+            <div class="role-icon">
+              <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="name" appHighlight [appHighlight]="searchQuery">
+              {{ role.name }}
+            </div>
+          </td>
+          <td class="description" appHighlight [appHighlight]="searchQuery">
+            {{ role.description || 'No description' }}
+          </td>
+          <td>
+            <div class="permissions-info">
+              <span class="permission-count">
+                {{ getPermissionCount(role.permissions) }} permissions
+              </span>
+              <div class="permission-tooltip" [attr.title]="getPermissionTooltip(role.permissions)">
+                <i class="fas fa-info-circle"></i>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="user-count">{{ role.userCount || 0 }}</span>
+            <button
+              class="btn btn-sm btn-outline-info view-users-btn"
+              (click)="viewRoleUsers(role.id)"
+              *ngIf="role.userCount && role.userCount > 0"
+              title="View users with this role"
+            >
+              <i class="fas fa-users"></i>
+            </button>
+          </td>
+          <td>
+            <span class="status-badge" [class.active]="role.isActive" [class.inactive]="!role.isActive">
+              {{ role.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="date">{{ role.createdAt | appDate:'medium' }}</td>
+          <td class="actions">
+            <div class="action-buttons">
+              <button class="btn btn-sm btn-outline-primary" (click)="editRole(role.id)" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button
+                class="btn btn-sm"
+                [class.btn-outline-success]="!role.isActive"
+                [class.btn-outline-warning]="role.isActive"
+                (click)="toggleRoleStatus(role)"
+                [title]="role.isActive ? 'Deactivate' : 'Activate'"
+              >
+                <i class="fas" [class.fa-toggle-off]="!role.isActive" [class.fa-toggle-on]="role.isActive"></i>
+              </button>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="deleteRole(role)"
+                title="Delete"
+                [disabled]="role.userCount && role.userCount > 0"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="!roles || roles.length === 0">
+      <i class="fas fa-user-shield empty-icon"></i>
+      <h3>No roles found</h3>
+      <p>Try adjusting your search criteria or create a new role.</p>
+      <button class="btn btn-primary" (click)="createRole()">
+        <i class="fas fa-plus"></i>
+        Add Your First Role
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isLoading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Loading roles...</p>
+  </div>
+
+  <!-- Pagination Section -->
+  <div class="pagination-section" *ngIf="totalPages > 1">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to
+      {{ Math.min(currentPage * pageSize, totalRoles) }} of {{ totalRoles }} roles
+    </div>
+    
+    <div class="pagination">
+      <button
+        class="btn btn-outline-primary"
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+      >
+        <i class="fas fa-chevron-left"></i>
+        Previous
+      </button>
+      
+      <button
+        *ngFor="let page of getPaginationArray()"
+        class="btn"
+        [class.btn-primary]="page === currentPage"
+        [class.btn-outline-primary]="page !== currentPage"
+        (click)="onPageChange(page)"
+      >
+        {{ page }}
+      </button>
+      
+      <button
+        class="btn btn-outline-primary"
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+      >
+        Next
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

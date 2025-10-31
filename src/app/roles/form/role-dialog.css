@@ -1,0 +1,311 @@
+/* Modern styling for the role dialog */
+.role-form {
+  margin: 0;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-header {
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: #495057;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.permission-count {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #6c757d;
+}
+
+.section-description {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.modern-input {
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.modern-input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.modern-input.is-invalid {
+  border-color: #dc3545;
+}
+
+.modern-input.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #dc3545;
+}
+
+.modern-permissions-container {
+  border: 1px solid #e9ecef;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
+
+.modern-category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.category-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #495057;
+  margin: 0;
+}
+
+.category-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.modern-permissions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.75rem;
+}
+
+.modern-permission-item {
+  display: flex;
+}
+
+.modern-permission-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
+  flex: 1;
+  background-color: #fff;
+  position: relative;
+}
+
+.modern-permission-checkbox:hover {
+  background-color: #f8f9fa;
+  border-color: #80bdff;
+}
+
+.modern-permission-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.permission-checkmark {
+  height: 1.25rem;
+  width: 1.25rem;
+  background-color: #fff;
+  border: 1px solid #adb5bd;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.modern-permission-checkbox:hover input ~ .permission-checkmark {
+  background-color: #fff;
+}
+
+.modern-permission-checkbox input:checked ~ .permission-checkmark {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.permission-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.modern-permission-checkbox input:checked ~ .permission-checkmark:after {
+  display: block;
+}
+
+.modern-permission-checkbox .permission-checkmark:after {
+  left: 0.4rem;
+  top: 0.15rem;
+  width: 0.375rem;
+  height: 0.625rem;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.permission-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.permission-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.permission-description {
+  font-size: 0.75rem;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+.modern-form-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 0.5rem;
+}
+
+.modern-form-checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-checkmark {
+  height: 1.25rem;
+  width: 1.25rem;
+  background-color: #fff;
+  border: 1px solid #adb5bd;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.modern-form-checkbox:hover input ~ .checkbox-checkmark {
+  background-color: #fff;
+}
+
+.modern-form-checkbox input:checked ~ .checkbox-checkmark {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.checkbox-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.modern-form-checkbox input:checked ~ .checkbox-checkmark:after {
+  display: block;
+}
+
+.modern-form-checkbox .checkbox-checkmark:after {
+  left: 0.4rem;
+  top: 0.15rem;
+  width: 0.375rem;
+  height: 0.625rem;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .modern-permissions-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .modern-category-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

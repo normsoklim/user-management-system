@@ -1,0 +1,256 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{ pageTitle }}</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+
+<div class="modal-body">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="user-form">
+    <div class="form-section">
+      <div class="section-header">
+        <h3 class="section-title">Profile Picture</h3>
+        <p class="section-description">Upload a profile picture for the user</p>
+      </div>
+      
+      <div class="avatar-upload-section">
+        <div class="avatar-preview-container">
+          <img
+            *ngIf="avatarPreviewUrl; else avatarPlaceholder"
+            [src]="avatarPreviewUrl"
+            alt="Avatar Preview"
+            class="avatar-preview"
+          >
+          <ng-template #avatarPlaceholder>
+            <div class="avatar-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </ng-template>
+        </div>
+        
+        <div class="avatar-upload-controls">
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onAvatarFileChange($event)"
+            #avatarInput
+            class="d-none"
+          >
+          <button
+            type="button"
+            class="btn btn-outline-primary"
+            (click)="avatarInput.click()"
+          >
+            <i class="fas fa-upload"></i>
+            Choose Image
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="removeAvatar()"
+            *ngIf="avatarPreviewUrl || user?.avatar"
+          >
+            <i class="fas fa-trash"></i>
+            Remove
+          </button>
+        </div>
+        <small class="form-text text-muted">
+          Recommended size: 200x200 pixels. Max file size: 2MB.
+        </small>
+      </div>
+    </div>
+    
+    <div class="form-section">
+      <div class="section-header">
+        <h3 class="section-title">Basic Information</h3>
+        <p class="section-description">Enter the user's personal details</p>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName" class="form-label">First Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user input-icon"></i>
+            <input
+              id="firstName"
+              type="text"
+              class="form-control modern-input"
+              formControlName="firstName"
+              placeholder="Enter first name"
+              [class.is-invalid]="firstName?.invalid && firstName?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="firstName?.invalid && firstName?.touched">
+            <span *ngIf="firstName?.errors?.['required']">First name is required</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName" class="form-label">Last Name</label>
+          <div class="input-wrapper">
+            <i class="fas fa-user input-icon"></i>
+            <input
+              id="lastName"
+              type="text"
+              class="form-control modern-input"
+              formControlName="lastName"
+              placeholder="Enter last name"
+              [class.is-invalid]="lastName?.invalid && lastName?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="lastName?.invalid && lastName?.touched">
+            <span *ngIf="lastName?.errors?.['required']">Last name is required</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="username" class="form-label">Username (Email)</label>
+          <div class="input-wrapper">
+            <i class="fas fa-envelope input-icon"></i>
+            <input
+              id="username"
+              type="email"
+              class="form-control modern-input"
+              formControlName="username"
+              placeholder="Enter username (email)"
+              [class.is-invalid]="username?.invalid && username?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="username?.invalid && username?.touched">
+            <span *ngIf="username?.errors?.['required']">Username is required</span>
+            <span *ngIf="username?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <div class="input-wrapper">
+            <i class="fas fa-at input-icon"></i>
+            <input
+              id="email"
+              type="email"
+              class="form-control modern-input"
+              formControlName="email"
+              placeholder="Enter email address"
+              [class.is-invalid]="email?.invalid && email?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+            <span *ngIf="email?.errors?.['required']">Email is required</span>
+            <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section" *ngIf="!isEditMode">
+      <div class="section-header">
+        <h3 class="section-title">Password</h3>
+        <p class="section-description">Set a secure password for the user</p>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input
+              id="password"
+              type="password"
+              class="form-control modern-input"
+              formControlName="password"
+              placeholder="Enter password"
+              [class.is-invalid]="password?.invalid && password?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="password?.invalid && password?.touched">
+            <span *ngIf="password?.errors?.['required']">Password is required</span>
+            <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
+          <div class="input-wrapper">
+            <i class="fas fa-lock input-icon"></i>
+            <input
+              id="confirmPassword"
+              type="password"
+              class="form-control modern-input"
+              formControlName="confirmPassword"
+              placeholder="Confirm password"
+              [class.is-invalid]="confirmPassword?.invalid && confirmPassword?.touched"
+            />
+          </div>
+          <div class="invalid-feedback" *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
+            <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
+            <span *ngIf="userForm.errors?.['passwordMismatch']">Passwords do not match</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <h3 class="section-title">Roles & Permissions</h3>
+        <p class="section-description">Select roles to assign to this user</p>
+      </div>
+      
+      <div class="form-group">
+        <div class="roles-grid modern-roles-grid">
+          <div class="role-item modern-role-item" *ngFor="let role of availableRoles">
+            <label class="role-checkbox modern-role-checkbox">
+              <input
+                type="checkbox"
+                [checked]="isRoleSelected(role)"
+                (change)="onRoleChange(role, $event)"
+              />
+              <span class="role-checkmark"></span>
+              <span class="role-name">{{ role | titlecase }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="invalid-feedback" *ngIf="roles?.invalid && roles?.touched">
+          <span *ngIf="roles?.errors?.['required']">At least one role must be selected</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section" *ngIf="isEditMode">
+      <div class="section-header">
+        <h3 class="section-title">Account Status</h3>
+        <p class="section-description">Manage the user's account status</p>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-checkbox modern-form-checkbox">
+          <input
+            type="checkbox"
+            formControlName="isActive"
+          />
+          <span class="checkbox-checkmark"></span>
+          <span class="checkbox-label">Account is active</span>
+        </label>
+        <small class="form-text text-muted">
+          Inactive users cannot log in to the system.
+        </small>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="activeModal.dismiss('Cancel click')">
+    Cancel
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="userForm.invalid || isLoading"
+    (click)="onSubmit()"
+  >
+    <span *ngIf="!isLoading">{{ submitButtonText }}</span>
+    <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span *ngIf="isLoading" class="sr-only">{{ isEditMode ? 'Updating...' : 'Creating...' }}</span>
+  </button>
+</div>

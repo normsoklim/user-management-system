@@ -1,0 +1,252 @@
+<div class="audit-list-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Audit Logs</h1>
+      <p class="page-subtitle">Track system activities and user actions</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline-secondary" (click)="refreshData()">
+        <i class="fas fa-sync-alt"></i>
+        Refresh
+      </button>
+      <button class="btn btn-primary" (click)="exportAuditLogs()">
+        <i class="fas fa-download"></i>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="summary-section" *ngIf="summary">
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="card-icon total">
+          <i class="fas fa-list"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Total Logs</h3>
+          <p class="card-value">{{ summary.totalLogs.toLocaleString() }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon today">
+          <i class="fas fa-calendar-day"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">Today</h3>
+          <p class="card-value">{{ summary.todayLogs.toLocaleString() }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon week">
+          <i class="fas fa-calendar-week"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">This Week</h3>
+          <p class="card-value">{{ summary.thisWeekLogs.toLocaleString() }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon month">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <div class="card-content">
+          <h3 class="card-title">This Month</h3>
+          <p class="card-value">{{ summary.thisMonthLogs.toLocaleString() }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-header">
+      <h2 class="filters-title">Filters</h2>
+      <button class="btn btn-text clear-filters-btn" (click)="clearFilters()">
+        <i class="fas fa-times"></i>
+        Clear Filters
+      </button>
+    </div>
+    <div class="filters-row">
+      <div class="search-box">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search logs..."
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+        />
+        <button class="search-btn" (click)="onSearch()">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+
+      <select class="form-control" [(ngModel)]="selectedAction" (change)="onFilterChange()">
+        <option value="">All Actions</option>
+        <option *ngFor="let action of availableActions" [value]="action">
+          {{ action }}
+        </option>
+      </select>
+
+      <select class="form-control" [(ngModel)]="selectedResource" (change)="onFilterChange()">
+        <option value="">All Resources</option>
+        <option *ngFor="let resource of availableResources" [value]="resource">
+          {{ resource }}
+        </option>
+      </select>
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="User ID"
+        [(ngModel)]="selectedUserId"
+        (change)="onFilterChange()"
+      />
+
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="startDate"
+        (change)="onFilterChange()"
+      />
+
+      <input
+        type="date"
+        class="form-control"
+        [(ngModel)]="endDate"
+        (change)="onFilterChange()"
+      />
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="IP Address"
+        [(ngModel)]="ipAddress"
+        (change)="onFilterChange()"
+      />
+
+      <select class="form-control" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+        <option [value]="25">25 per page</option>
+        <option [value]="50">50 per page</option>
+        <option [value]="100">100 per page</option>
+        <option [value]="200">200 per page</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="table-container" *ngIf="!isLoading">
+    <table class="audit-table">
+      <thead>
+        <tr>
+          <th (click)="onSort('timestamp')">
+            Timestamp
+            <i class="sort-icon" [class]="getSortIcon('timestamp')"></i>
+          </th>
+          <th (click)="onSort('action')">
+            Action
+            <i class="sort-icon" [class]="getSortIcon('action')"></i>
+          </th>
+          <th (click)="onSort('resource')">
+            Resource
+            <i class="sort-icon" [class]="getSortIcon('resource')"></i>
+          </th>
+          <th (click)="onSort('userId')">
+            User
+            <i class="sort-icon" [class]="getSortIcon('userId')"></i>
+          </th>
+          <th (click)="onSort('ipAddress')">
+            IP Address
+            <i class="sort-icon" [class]="getSortIcon('ipAddress')"></i>
+          </th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let log of auditLogs; let i = index" [style.--row-index]="i">
+          <td class="timestamp">{{ log.timestamp | appDate:'datetime' }}</td>
+          <td>
+            <span class="action-badge badge-{{ getActionColor(log.action) }}">
+              <i class="action-icon" [class]="getActionIcon(log.action)"></i>
+              {{ log.action }}
+            </span>
+          </td>
+          <td class="resource">{{ log.resource }}</td>
+          <td class="user">
+            <div *ngIf="log.user" class="user-info">
+              <div class="user-name">{{ log.user.firstName }} {{ log.user.lastName }}</div>
+              <div class="user-email">{{ log.user.username }}</div>
+            </div>
+            <span *ngIf="!log.user" class="text-muted">{{ log.userId }}</span>
+          </td>
+          <td class="ip-address">{{ log.ipAddress }}</td>
+          <td class="details">
+            <div class="details-content" *ngIf="log.details">
+              <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#details-' + log.id">
+                <i class="fas fa-eye"></i>
+                View
+              </button>
+              <div class="collapse" [id]="'details-' + log.id">
+                <div class="details-box">
+                  <pre>{{ formatDetails(log.details) }}</pre>
+                </div>
+              </div>
+            </div>
+            <span *ngIf="!log.details" class="text-muted">No details</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="empty-state" *ngIf="!auditLogs || auditLogs.length === 0">
+      <i class="fas fa-history empty-icon"></i>
+      <h3>No audit logs found</h3>
+      <p>Try adjusting your search criteria or check back later for new activity.</p>
+    </div>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Loading audit logs...</p>
+  </div>
+
+  <div class="pagination-section" *ngIf="totalPages > 1">
+    <div class="pagination-info">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to 
+      {{ Math.min(currentPage * pageSize, totalLogs) }} of {{ totalLogs }} logs
+    </div>
+    
+    <div class="pagination">
+      <button 
+        class="btn btn-outline-primary" 
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+      >
+        <i class="fas fa-chevron-left"></i>
+        Previous
+      </button>
+      
+      <button 
+        *ngFor="let page of getPaginationArray()" 
+        class="btn"
+        [class.btn-primary]="page === currentPage"
+        [class.btn-outline-primary]="page !== currentPage"
+        (click)="onPageChange(page)"
+      >
+        {{ page }}
+      </button>
+      
+      <button 
+        class="btn btn-outline-primary" 
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+      >
+        Next
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
